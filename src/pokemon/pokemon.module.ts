@@ -14,6 +14,9 @@ import { Pokemon, PokemonSchema } from './entities/pokemon.entity';
         schema: PokemonSchema, //Schema que exportamos en el entity
       }
     ])//asyncrono si no quremos que se levante hasta que reuelva
+  ],
+  exports: [
+    MongooseModule
   ]
 })
 export class PokemonModule {}
