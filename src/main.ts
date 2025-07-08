@@ -9,6 +9,11 @@ async function bootstrap() {
     new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
+    //Estas trasformaran la data a nivel global con base a lo que manda el DTO pero consume mas memoria
+    transform: true,
+    transformOptions: {
+      enableImplicitConversion: true,
+    }
   })
 );
   await app.listen(process.env.PORT ?? 3000);
