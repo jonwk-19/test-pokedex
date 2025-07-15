@@ -5,15 +5,25 @@ import { isValidObjectId, Model } from 'mongoose';
 import { Pokemon } from './entities/pokemon.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PokemonService {
 
+  private defaultLimit : number;
   //Las inyecciones de dependencias solo se hacen en el constructor
   constructor(
     @InjectModel( Pokemon.name ) //permite inyectar el modelo en el servicio
-    private readonly pokemonModel : Model<Pokemon>//importar el modelo de mongoose y pasar el entity
-  ){}
+    private readonly pokemonModel : Model<Pokemon>,//importar el modelo de mongoose y pasar el entity
+    private readonly configService: ConfigService,
+  ){
+    //NOSONAR
+    // console.log(process.env.DEFAULT_LIMIT);
+    // console.log(configService.get('defaultlimint'))
+    // console.log(configService.getOrThrow('jwt-seed')); // Si no lo encuentra lanza error y truena la app
+
+    this.defaultLimit = configService.get<number>('defaultlimint')!;
+  }
 
 async create(createPokemonDto: CreatePokemonDto) {
     createPokemonDto.name = createPokemonDto.name.toLowerCase();
@@ -27,7 +37,8 @@ async create(createPokemonDto: CreatePokemonDto) {
 
   findAll(paginationDto: PaginationDto) {
 
-    const { limit = 10, offset = 0 } = paginationDto;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { limit = this.defaultLimit, offset = 0 } = paginationDto;
 
     return this.pokemonModel.find()
     .limit( limit )
