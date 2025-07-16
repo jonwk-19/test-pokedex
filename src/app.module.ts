@@ -22,7 +22,9 @@ import { envValidationSchema } from './config/env.validation';
       rootPath: join(__dirname,'..','public'),
     }),
 
-    MongooseModule.forRoot(process.env.MONGODB ?? ''),// como minimo argumento el url de nuestra db
+    MongooseModule.forRoot(process.env.MONGODB ?? '', {
+      // dbName: 'pokemonsdb'
+    }),// como minimo argumento el url de nuestra db
     PokemonModule, CommonModule, SeedModule
   ],
 })
